@@ -1,3 +1,7 @@
+from rest_framework import viewsets
+from home.models import Diakstiria, Ktiria
+from .serializers import DiakstiriaSerializer, KtiriaSerializer
+from rest_framework import authentication
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework.viewsets import ModelViewSet, ViewSet
 from rest_framework.authtoken.models import Token
@@ -28,3 +32,21 @@ class LoginViewSet(ViewSet):
         token, created = Token.objects.get_or_create(user=user)
         user_serializer = UserSerializer(user)
         return Response({"token": token.key, "user": user_serializer.data})
+
+
+class KtiriaViewSet(viewsets.ModelViewSet):
+    serializer_class = KtiriaSerializer
+    authentication_classes = (
+        authentication.SessionAuthentication,
+        authentication.TokenAuthentication,
+    )
+    queryset = Ktiria.objects.all()
+
+
+class DiakstiriaViewSet(viewsets.ModelViewSet):
+    serializer_class = DiakstiriaSerializer
+    authentication_classes = (
+        authentication.SessionAuthentication,
+        authentication.TokenAuthentication,
+    )
+    queryset = Diakstiria.objects.all()
